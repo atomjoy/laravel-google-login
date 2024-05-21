@@ -64,6 +64,9 @@ config/services.php
 	'redirect' => env('GITHUB_REDIRECT_URL'),
 	'homepage' => env('GITHUB_HOME_URL'),
 ],
+
+// Set allowed drivers here or update checkDriver() in OauthLoginController
+'oauth_drivers' => ['github', 'google'], 
 ```
 
 ## Routes
@@ -95,23 +98,6 @@ Copy OauthLoginController.php controller to app/Http/Controllers
     <a href="/oauth/google/redirect">Login with Google</a>
     <a href="/oauth/github/redirect">Login with Github</a>
 @endif
-```
-
-## Allowed drivers
-
-Update **OauthLoginController** method **checkDriver()** add or remove drivers.
-
-```php
-<?php
-
-function checkDriver()
-{
-	if (!in_array(request('driver'), [
-		'github', 'google', // Allowed drivers
-	])) {
-		throw new \Exception("Invalid oauth driver.");
-	}
-}
 ```
 
 ## Javascript Google One Tap and button (optional)
