@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 
-class GoogleLoginController extends Controller
+class GithubLoginController extends Controller
 {
 	/**
 	 * Logout
@@ -22,34 +22,34 @@ class GoogleLoginController extends Controller
 	{
 		Auth::logout();
 
-		return redirect(config('services.google.homepage', '/'));
+		return redirect(config('services.github.homepage', '/'));
 	}
 
 	/**
-	 * Redirect to google
+	 * Redirect to github
 	 *
 	 * @return void
 	 */
 	public function redirect()
 	{
-		return Socialite::driver('google')->redirect();
+		return Socialite::driver('github')->redirect();
 	}
 
 	/**
-	 * Callback from google
+	 * Callback from github
 	 *
 	 * @return void
 	 */
 	public function callback()
 	{
-		$googleUser = Socialite::driver('google')->stateless()->user();
+		$githubUser = Socialite::driver('github')->stateless()->user();
 
-		$user = User::where('email', $googleUser->email)->first();
+		$user = User::where('email', $githubUser->email)->first();
 
 		if (!$user) {
 			$user = User::create([
-				'name' => $googleUser->name,
-				'email' => $googleUser->email,
+				'name' => $githubUser->name,
+				'email' => $githubUser->email,
 				'password' => Hash::make(md5(uniqid() . microtime())),
 				'email_verified_at' => now(),
 			]);
@@ -63,36 +63,6 @@ class GoogleLoginController extends Controller
 
 		Auth::login($user);
 
-		return redirect(config('services.google.homepage', '/'));
-	}
-
-	public function oauth()
-	{
-		$token = request()->input('token');
-		$client = config('services.google.client_id');
-		$res = Http::get("https://oauth2.googleapis.com/tokeninfo", ["id_token" => $token]);
-		if ($res->ok()) {
-			$arr = $res->json();
-			if ($arr['aud'] != $client) {
-				return redirect(config('services.google.homepage', '/'));
-			}
-			$user = User::where('email', $arr['email'])->first();
-			if (!$user) {
-				$user = User::create([
-					'name' => $arr['name'],
-					'email' => $arr['email'],
-					'password' => Hash::make(md5(uniqid() . microtime())),
-					'email_verified_at' => now(),
-				]);
-				Profile::updateOrCreate([
-					'user_id' => $user->id
-				], [
-					'username' => 'user' . uniqid(),
-					'name' => $user->name ?? null
-				]);
-			}
-			Auth::login($user);
-		}
-		return redirect(config('services.google.homepage', '/'));
+		return redirect(config('services.github.homepage', '/'));
 	}
 }
