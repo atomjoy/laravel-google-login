@@ -97,6 +97,23 @@ Copy OauthLoginController.php controller to app/Http/Controllers
 @endif
 ```
 
+## Allowed drivers
+
+Update **OauthLoginController** method **checkDriver()** add or remove drivers.
+
+```php
+<?php
+
+function checkDriver()
+{
+	if (!in_array(request('driver'), [
+		'github', 'google', // Allowed drivers
+	])) {
+		throw new \Exception("Invalid oauth driver.");
+	}
+}
+```
+
 ## Javascript Google One Tap and button (optional)
 
 ```html
