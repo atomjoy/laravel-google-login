@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Oauth;
+namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Profile;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 
-class GoogleLogin extends Controller
+class GoogleLoginController extends Controller
 {
 	/**
 	 * Logout
