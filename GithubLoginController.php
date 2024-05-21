@@ -4,7 +4,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Profile;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -52,12 +51,6 @@ class GithubLoginController extends Controller
 				'email' => $githubUser->email,
 				'password' => Hash::make(md5(uniqid() . microtime())),
 				'email_verified_at' => now(),
-			]);
-			Profile::updateOrCreate([
-				'user_id' => $user->id
-			], [
-				'username' => 'user.' . uniqid(),
-				'name' => $user->name ?? null
 			]);
 		}
 
