@@ -52,14 +52,7 @@ class GoogleLoginController extends Controller
 				'password' => Hash::make(md5(uniqid() . microtime())),
 				'email_verified_at' => now(),
 			]);
-		}
-
-		// Allowed
-		// $user->getId();
-		// $user->getNickname();
-		// $user->getName();
-		// $user->getEmail();
-		// $user->getAvatar();
+		}	
 
 		Auth::login($user);
 
