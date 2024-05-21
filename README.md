@@ -22,13 +22,24 @@ Create external OAuth 2.0 client IDs and retrieve keys
 
 <https://console.cloud.google.com/apis/credentials>
 
-## Env
+## Github new app oauth keys
+
+<https://github.com/settings/developers>
+
+## Setings
+
+.env file
 
 ```sh
-GOOGLE_CLIENT_ID=0000-xxxx.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=XXXX-vaI9hZo-mg
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 GOOGLE_REDIRECT_URL=https://localhost/google/callback
 GOOGLE_HOME_URL=/
+
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+GITHUB_REDIRECT_URL=https://localhost/github/callback
+GITHUB_HOME_URL=/
 ```
 
 ## Config
@@ -41,7 +52,14 @@ config/services.php
     'client_secret' => env('GOOGLE_CLIENT_SECRET'),
     'redirect' => env('GOOGLE_REDIRECT_URL'),
     'homepage' => env('GOOGLE_HOME_URL'),
-]
+],
+
+'github' => [
+	'client_id' => env('GITHUB_CLIENT_ID'),
+	'client_secret' => env('GITHUB_CLIENT_SECRET'),
+	'redirect' => env('GITHUB_REDIRECT_URL'),
+	'homepage' => env('GITHUB_HOME_URL'),
+],
 ```
 
 ## Routes
@@ -52,89 +70,21 @@ config/services.php
 use App\Http\Controllers\GoogleLoginController;
 use Illuminate\Support\Facades\Route;
 
+# Google
 Route::get('/google/redirect', [GoogleLoginController::class, 'redirect'])->name('google.redirect');
 Route::get('/google/callback', [GoogleLoginController::class, 'callback'])->name('google.callback');
 Route::get('/google/logout', [GoogleLoginController::class, 'logout'])->name('google.logout');
 Route::get('/google/oauth', [GoogleLoginController::class, 'oauth'])->name('google.oauth');
+
+# Github
+Route::get('/github/redirect', [GithubLogin::class, 'redirect'])->name('github.redirect');
+Route::get('/github/callback', [GithubLogin::class, 'callback'])->name('github.callback');
+Route::get('/github/logout', [GithubLogin::class, 'logout'])->name('github.logout');
 ```
 
-## Controller
+## Controllers
 
-```php
-<?php
-
-namespace App\Http\Controllers;
-
-use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
-
-class GoogleLoginController extends Controller
-{
-    public function logout()
-    {
-        Auth::logout();
-        return redirect(config('services.google.homepage', '/'));
-    }
-
-    public function redirect()
-    {
-        return Socialite::driver('google')->redirect();
-    }
-
-    public function callback()
-    {
-        $googleUser = Socialite::driver('google')->stateless()->user();
-        $user = User::where('email', $googleUser->email)->first();
-        if (!$user) {
-            $user = User::create([
-                'name' => $googleUser->name,
-                'email' => $googleUser->email,
-                'password' => \Hash::make(md5(uniqid() . microtime())),
-                'email_verified_at' => now(),
-            ]);
-        }
-        Auth::login($user);
-        return redirect(config('services.google.homepage', '/'));
-
-        // Allowed
-        // $user->getId();
-        // $user->getNickname();
-        // $user->getName();
-        // $user->getEmail();
-        // $user->getAvatar();
-    }
-
-    public function oauth()
-    {
-        $token = request()->input('token'); // Jwt token from javascript
-        $client = config('services.google.client_id');
-        $res = Http::get("https://oauth2.googleapis.com/tokeninfo", ["id_token" => $token]);
-
-        if ($res->ok()) {
-            $arr = $res->json();
-            if ($arr['aud'] != $client) {
-                // Change to json if you need
-                return redirect(config('services.google.homepage', '/'));
-            }
-            $user = User::where('email', $arr['email'])->first();
-            if (!$user) {
-                $user = User::create([
-                    'name' => $arr['name'],
-                    'email' => $arr['email'],
-                    'password' => \Hash::make(md5(uniqid() . microtime())),
-                    'email_verified_at' => now(),
-                ]);
-            }
-            Auth::login($user);
-        }
-        // Change to json if you need
-        return redirect(config('services.google.homepage', '/'));
-    }
-}
-```
+Copy controllers to app/Http/Controllers
 
 ## Login button
 
@@ -145,6 +95,7 @@ class GoogleLoginController extends Controller
     <a href="{{ route('google.logout') }}">Logout</a>
 @else
     <a href="{{ route('google.redirect') }}">Login with Google</a>
+    <a href="{{ route('github.redirect') }}">Login with Github</a>
 @endif
 ```
 
