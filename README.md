@@ -150,8 +150,6 @@ class GoogleLoginController extends Controller
 
 ## Javascript Google One Tap and button (optional)
 
-Replace Google_Client_ID with your Google Client ID
-
 ```html
 @if (!Auth::check())
 <div id="buttonDiv"></div>
@@ -167,7 +165,7 @@ Replace Google_Client_ID with your Google Client ID
 	
 	window.onload = function () {
 		google.accounts.id.initialize({
-			client_id: "Google_Client_ID", // Replace with your Google Client ID
+			client_id: "{{ config('services.google.client_id') }}", // Or replace with your Google Client ID
 			callback: handleCredentialResponse // We choose to handle the callback in client side, so we include a reference to a function that will handle the response
 		});
 
