@@ -15,9 +15,10 @@ class OauthLoginController extends Controller
 	 */
 	function checkDriver()
 	{
-		if (!in_array(request('driver'), [
-			'github', 'google'
-		])) {
+		if (!in_array(
+			request('driver'),
+			(array) config('services.oauth_drivers', ['github', 'google'])
+		)) {
 			throw new \Exception("Invalid oauth driver.");
 		}
 	}
