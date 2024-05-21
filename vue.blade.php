@@ -86,15 +86,15 @@
 
 	@if (Auth::check())
 	{{ Auth::user()->name }}
-	<a href="{{ route('google.logout') }}" id="glogout">Logout</a>
+	<a href="/oauth/google/logout" id="glogout">Logout</a>
 	@else
-	<a href="{{ route('google.redirect') }}" title="Google Login">
+	<a href="/oauth/google/redirect" title="Google Login">
 		<div class="google-button">
 			<img src="storage/icons8-google.png" alt="Login with Google" width="48">
 			<span> Sign in with Google </span>
 		</div>
 	</a>
-	<a href="{{ route('github.redirect') }}" title="Github Login">
+	<a href="/oauth/github/redirect" title="Github Login">
 		<div class="github-button">
 			<img src="storage/icons8-github.png" alt="Login with Github" width="48">
 			<span> Sign in with Github </span>
@@ -107,8 +107,8 @@
 	<script src="https://accounts.google.com/gsi/client" async defer></script>
 	<script>
 		function handleCredentialResponse(response) {
-			window.location.href = '/google/redirect'
-			// window.location.href = '/google/oauth?token=' + response.credential
+			window.location.href = '/oauth/google/redirect'
+			// window.location.href = '/oauth/google/oauth?token=' + response.credential
 			// Here we can do whatever process with the response we want
 			// Note that response.credential is a JWT ID token
 			// console.log("Encoded JWT ID token: " + response.credential);
