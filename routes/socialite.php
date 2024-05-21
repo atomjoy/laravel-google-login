@@ -9,6 +9,6 @@ Route::get('/google/callback', [GoogleLoginController::class, 'callback'])->name
 Route::get('/google/oauth', [GoogleLoginController::class, 'oauth'])->name('google.oauth');
 Route::get('/google/logout', [GoogleLoginController::class, 'logout'])->name('google.logout');
 
-Route::get('/github/redirect', [GithubLogin::class, 'redirect'])->name('github.redirect');
-Route::get('/github/callback', [GithubLogin::class, 'callback'])->name('github.callback');
-Route::get('/github/logout', [GithubLogin::class, 'logout'])->name('github.logout');
+Route::get('/github/redirect', [GithubLoginController::class, 'redirect'])->name('github.redirect');
+Route::get('/github/callback', [GithubLoginController::class, 'callback'])->name('github.callback');
+Route::get('/github/logout', [GithubLoginController::class, 'logout'])->name('github.logout');
