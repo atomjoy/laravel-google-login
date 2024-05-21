@@ -148,7 +148,7 @@ class GoogleLoginController extends Controller
 @endif
 ```
 
-## Javascript Google One Tap and button
+## Javascript Google One Tap and button (optional)
 
 Replace Google_Client_ID with your Google Client ID
 
