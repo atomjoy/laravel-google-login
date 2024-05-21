@@ -1,11 +1,11 @@
 <?php
 
 @if (Auth::check())
-    <div>{{ Auth::user()->name }}</div>
-	<a href="{{ route('google.logout') }}">Logout</a>
+    	<div>{{ Auth::user()->name }}</div>
+	<a href="/oauth/google/logout">Logout</a>
 @else
-	<a href="{{ route('google.redirect') }}">Login with Google</a>
-	<a href="{{ route('github.redirect') }}">Login with Github</a>
+	<a href="/oauth/google/redirect">Login with Google</a>
+	<a href="/oauth/github/redirect">Login with Github</a>
 @endif
 
 @if (!Auth::check())
@@ -13,8 +13,8 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 	function handleCredentialResponse(response) {
-        window.location.href = '/google/redirect'
-        // window.location.href = '/google/oauth?token=' + response.credential
+        window.location.href = '/oauth/google/redirect'
+        // window.location.href = '/oauth/google/oauth?token=' + response.credential
         // Here we can do whatever process with the response we want
         // Note that response.credential is a JWT ID token
         // console.log("Encoded JWT ID token: " + response.credential);
