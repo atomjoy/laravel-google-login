@@ -4,7 +4,8 @@ How to add Google and Github login using Socialite in Laravel. Google One Tap wi
 
 ## Install
 
-composer require laravel/socialite
+- composer require laravel/socialite
+- Add local domain host example.org and enable domain SSL in xampp virtualhost (for callbacks and js) or try with localhost
 
 ## Google project
 
@@ -35,12 +36,12 @@ Create external OAuth 2.0 client IDs and retrieve keys
 ```sh
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
-GOOGLE_REDIRECT_URL=https://localhost/oauth/google/callback
+GOOGLE_REDIRECT_URL=https://example.org/oauth/google/callback
 GOOGLE_HOME_URL=/
 
 GITHUB_CLIENT_ID=
 GITHUB_CLIENT_SECRET=
-GITHUB_REDIRECT_URL=https://localhost/oauth/github/callback
+GITHUB_REDIRECT_URL=https://example.org/oauth/github/callback
 GITHUB_HOME_URL=/
 ```
 
