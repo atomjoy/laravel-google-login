@@ -6,6 +6,7 @@ How to add Google and Github login using Socialite in Laravel. Google One Tap wi
 
 - composer require laravel/socialite
 - Add local domain host example.org and enable domain SSL in xampp virtualhost (for callbacks and js) or try with localhost
+- Windows local domain and virtualhost in xampp https://github.com/atomjoy/xampp
 
 ## Google project
 
