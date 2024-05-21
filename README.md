@@ -35,12 +35,12 @@ Create external OAuth 2.0 client IDs and retrieve keys
 ```sh
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
-GOOGLE_REDIRECT_URL=https://localhost/google/callback
+GOOGLE_REDIRECT_URL=https://localhost/oauth/google/callback
 GOOGLE_HOME_URL=/
 
 GITHUB_CLIENT_ID=
 GITHUB_CLIENT_SECRET=
-GITHUB_REDIRECT_URL=https://localhost/github/callback
+GITHUB_REDIRECT_URL=https://localhost/oauth/github/callback
 GITHUB_HOME_URL=/
 ```
 
@@ -69,24 +69,18 @@ config/services.php
 ```php
 <?php
 
-use App\Http\Controllers\GoogleLoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OauthLoginController;
 
-# Google
-Route::get('/google/redirect', [GoogleLoginController::class, 'redirect'])->name('google.redirect');
-Route::get('/google/callback', [GoogleLoginController::class, 'callback'])->name('google.callback');
-Route::get('/google/logout', [GoogleLoginController::class, 'logout'])->name('google.logout');
-Route::get('/google/oauth', [GoogleLoginController::class, 'oauth'])->name('google.oauth');
-
-# Github
-Route::get('/github/redirect', [GithubLoginController::class, 'redirect'])->name('github.redirect');
-Route::get('/github/callback', [GithubLoginController::class, 'callback'])->name('github.callback');
-Route::get('/github/logout', [GithubLoginController::class, 'logout'])->name('github.logout');
+Route::get('/oauth/{driver}/redirect', [OauthLoginController::class, 'redirect']);
+Route::get('/oauth/{driver}/callback', [OauthLoginController::class, 'callback']);
+Route::get('/oauth/{driver}/logout', [OauthLoginController::class, 'logout']);
+Route::get('/oauth/{driver}/oauth', [OauthLoginController::class, 'logout']);
 ```
 
 ## Controllers
 
-Copy controllers to app/Http/Controllers
+Copy OauthLoginController.php controller to app/Http/Controllers
 
 ## Login button
 
@@ -94,10 +88,10 @@ Copy controllers to app/Http/Controllers
 <?php
 @if (Auth::check())
     <div>{{ Auth::user()->name }}</div>
-    <a href="{{ route('google.logout') }}">Logout</a>
+    <a href="/oauth/google/logout">Logout</a>
 @else
-    <a href="{{ route('google.redirect') }}">Login with Google</a>
-    <a href="{{ route('github.redirect') }}">Login with Github</a>
+    <a href="/oauth/google/redirect">Login with Google</a>
+    <a href="/oauth/github/redirect">Login with Github</a>
 @endif
 ```
 
@@ -109,8 +103,8 @@ Copy controllers to app/Http/Controllers
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 	function handleCredentialResponse(response) {
-		window.location.href = '/google/redirect'
-		// window.location.href = '/google/oauth?token=' + response.credential
+		window.location.href = '/oauth/google/redirect'
+		// window.location.href = '/oauth/google/oauth?token=' + response.credential
 		// Here we can do whatever process with the response we want
 		// Note that response.credential is a JWT ID token
 		// console.log("Encoded JWT ID token: " + response.credential);
