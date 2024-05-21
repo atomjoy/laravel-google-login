@@ -2,6 +2,8 @@
 
 How to add Google and Github login using Socialite in Laravel. Google One Tap with Vue and Laravel Socialite.
 
+## Install
+
 composer require laravel/socialite
 
 ## Google project
