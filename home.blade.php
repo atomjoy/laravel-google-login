@@ -6,7 +6,6 @@
     <a href="{{ route('google.redirect') }}">Login with Google</a>
 @endif
 
-
 @if (!Auth::check())
 <div id="buttonDiv"></div>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -20,7 +19,7 @@
   }
   window.onload = function () {
    google.accounts.id.initialize({
-    client_id: "Google_Client_ID", // Replace with your Google Client ID
+    client_id: "{{ config('services.google.client_id') }}", // Or replace with your Google Client ID
     callback: handleCredentialResponse // We choose to handle the callback in client side, so we include a reference to a function that will handle the response
    });
    // Show "Sign-in" button (optional)
